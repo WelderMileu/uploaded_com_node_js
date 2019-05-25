@@ -1,5 +1,6 @@
 const express = require('express')
-const multer = require('multer') // Biblioteca de Uploaded do NodeJS 
+const multer = require('multer') // Biblioteca de Uploaded do NodeJS
+const path = require('path')
 const app = express()
 
 // Tratando o nosso uplodaded
@@ -14,6 +15,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }) // Definado o caminho onde serao salvo os arquivos
 app.set('view engine', 'ejs')
+app.use(express.static(path.join(__dirname, 'views')))
 
 app.get('/',(req, res) => {
 	res.render("home")
@@ -22,7 +24,7 @@ app.get('/',(req, res) => {
 // Tratando o uploaded do nosso home
 app.post('/',upload.single('arquivo'),(req, res) => {
 	console.log(req.body, req.file)
-	res.send('arquivo enviado com sucesso!')
+	res.json(req.file)
 })
 
 app.listen(3000,(erro) => {
